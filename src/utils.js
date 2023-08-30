@@ -3,6 +3,12 @@ export async function get_file(file_name){
     return await file.json()
 }
 
+export function New2DArray(j, k, fill){
+    return Array(j)
+        .fill(fill)
+        .map(() => Array(k).fill(fill));
+}
+
 export const slice = (array, sx, ex, sy, ey) => array.slice(sx, ex + 1).map(i => i.slice(sy, ey + 1))
 
 export const find = (array, key) => {
