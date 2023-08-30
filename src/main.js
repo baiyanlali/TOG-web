@@ -1,5 +1,5 @@
 import Phaser from "./lib/phaser.js";
-import {get_file, sleep} from "./utils.js";
+import {get_file, sleep, slice} from "./utils.js";
 import {outputs} from "./outputs.js";
 
 const updateRate = 1
@@ -137,10 +137,15 @@ export class GameScene extends Phaser.Scene {
     }
 
     updateProbInfo(){
-        let prob_txt = play[this.index % play.length]["probs"][0]
+        const prob_txt = play[this.index % play.length]["probs"][0]
+        const raw_txt = play[this.index % play.length]["raw_val"][0]
+        const map_arr = play[this.index % play.length]["map"]
+        const [x, y] = find(map_arr, 'nokey')
 
         if(this.outputs){
             this.outputs.Actions = prob_txt.map(m=>m.toFixed(1))
+            this.outputs.Actions2 = raw_txt.map(m=>m.toFixed(1))
+            this.outputs.PartialMap = slice(map_arr, x - 3, x + 4, y - 3, y + 4)
         }
 
         // prob_txt = prob_txt.map(m=>m.toFixed(2)).join("<br>")
