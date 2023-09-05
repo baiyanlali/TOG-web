@@ -16,7 +16,7 @@ export const find = (array, key) => {
         const element = array[i];
         for (let j = 0; j < element.length; j++) {
             const e = element[j];
-            if(e === key){
+            if(e.includes(key)){
                 return [i, j]
             }
         }

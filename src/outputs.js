@@ -43,7 +43,15 @@ export let outputs = (s)=> {
 
     s.draw_partial_game = () => {
         if(s.PartialMap.length === 0) return
-
+        console.log('update')
+        for (let i = 0; i < s.PartialMap.length; i++) {
+            for (let j = 0; j < s.PartialMap[i].length; j++) {
+                let e = s.PartialMap[i][j]
+                if(e==='')
+                    e = 'floor'
+                s.image(s.images[e], i * 24, j * 24)
+            }            
+        }
     }
 
     s.draw_neural_network = () => {

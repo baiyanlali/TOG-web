@@ -1,5 +1,5 @@
 import Phaser from "./lib/phaser.js";
-import {get_file, sleep, slice} from "./utils.js";
+import {find, get_file, sleep, slice} from "./utils.js";
 import {outputs} from "./outputs.js";
 
 const updateRate = 1
@@ -83,7 +83,7 @@ export class GameScene extends Phaser.Scene {
 
     create() {
         this.images = []
-        this.buildLevel(init_level)
+        this.buildLevel(init_level, {})
 
         // let prob_txt = play[0]["probs"][0]
         // prob_txt = prob_txt.map(m=>m.toFixed(2)).join("<br>")
@@ -126,7 +126,7 @@ export class GameScene extends Phaser.Scene {
         this.change = false
         let curr_play = play[this.index % play.length]
         this.clear()
-        this.buildLevel(curr_play["map"])
+        this.buildLevel(curr_play["map"], curr_play)
         this.updateProbInfo()
     }
 
@@ -139,22 +139,29 @@ export class GameScene extends Phaser.Scene {
     updateProbInfo(){
         const prob_txt = play[this.index % play.length]["probs"][0]
         const raw_txt = play[this.index % play.length]["raw_val"][0]
-        const map_arr = play[this.index % play.length]["map"]
+        const map_arr = this.parseLevel(play[this.index % play.length]["map"])
+        const [row, column] = [map_arr.length, map_arr[0].length] 
         const [x, y] = find(map_arr, 'nokey')
+        console.log(`position: ${[x, y]}`)
+        if(x===-1 || y === -1) {
+            return
+        }
 
         if(this.outputs){
             this.outputs.Actions = prob_txt.map(m=>m.toFixed(1))
             this.outputs.Actions2 = raw_txt.map(m=>m.toFixed(1))
-            this.outputs.PartialMap = slice(map_arr, x - 3, x + 4, y - 3, y + 4)
+
+            this.outputs.PartialMap = slice(map_arr, Math.max(0, x - 3), Math.min(x + 4, row - 1), Math.max(0, y - 3),  Math.min(y + 4, column-1))
         }
 
         // prob_txt = prob_txt.map(m=>m.toFixed(2)).join("<br>")
         // document.getElementById("probs").innerHTML = prob_txt
     }
 
-    buildLevel(level_str) {
+    buildLevel(level_str, curr_play) {
         this.images = []
         const levels = this.parseLevel(level_str)
+        curr_play['array'] = levels
         for (let i = 0; i < levels.length; i++) {
             for (let j = 0; j < levels[i].length; j++) {
                 this.add.image(j * 10, i * 10, "floor").setDisplayOrigin(0, 0).setDisplaySize(10, 10)
