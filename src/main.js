@@ -1,27 +1,27 @@
 import Phaser from "./lib/phaser.js";
-import {find, get_file, sleep, slice} from "./utils.js";
-import {outputs} from "./outputs.js";
+import { find, get_file, sleep, slice } from "./utils.js";
+import { outputs } from "./outputs.js";
 
 const updateRate = 1
 
 const ele =
-['floor',
-'gold',
-'diamond',
-'treasure',
-'chest',
-'trapchest',
-'shovel',
-'avatar',
-'nokey',
-'withkey',
-'monsterQuick',
-'monsterNormal',
-'monsterSlow',
-'monsterChest',
-'wall',
-'key',
-'shovel nokey']
+    ['floor',
+        'gold',
+        'diamond',
+        'treasure',
+        'chest',
+        'trapchest',
+        'shovel',
+        'avatar',
+        'nokey',
+        'withkey',
+        'monsterQuick',
+        'monsterNormal',
+        'monsterSlow',
+        'monsterChest',
+        'wall',
+        'key',
+        'shovel nokey']
 
 const init_level =
     "wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall,wall\n" +
@@ -89,7 +89,7 @@ export class GameScene extends Phaser.Scene {
         // prob_txt = prob_txt.map(m=>m.toFixed(2)).join("<br>")
         this.updateProbInfo()
         // document.getElementById("probs").innerHTML = prob_txt
-        document.getElementById("next_step").onclick = ()=>{
+        document.getElementById("next_step").onclick = () => {
             this.nextStep()
         }
 
@@ -99,7 +99,7 @@ export class GameScene extends Phaser.Scene {
             document.getElementById("stop_play").hidden = false
             document.getElementById("auto_play").hidden = true
 
-            while(this.autoPlayStop===false){
+            while (this.autoPlayStop === false) {
                 await sleep(1000)
                 this.nextStep()
             }
@@ -121,7 +121,7 @@ export class GameScene extends Phaser.Scene {
     change = false
 
     update(time, delta) {
-        if(!this.change) return
+        if (!this.change) return
 
         this.change = false
         let curr_play = play[this.index % play.length]
@@ -130,29 +130,29 @@ export class GameScene extends Phaser.Scene {
         this.updateProbInfo()
     }
 
-    nextStep(){
-        this.index ++
+    nextStep() {
+        this.index++
         this.change = true
 
     }
 
-    updateProbInfo(){
+    updateProbInfo() {
         const prob_txt = play[this.index % play.length]["probs"][0]
         const raw_txt = play[this.index % play.length]["raw_val"][0]
         const map_arr = this.parseLevel(play[this.index % play.length]["map"])
-        const [row, column] = [map_arr.length, map_arr[0].length] 
+        const [row, column] = [map_arr.length, map_arr[0].length]
         const [x, y] = find(map_arr, 'nokey')
         // console.log(`position: ${[x, y]}`)
-        if(x===-1 || y === -1) {
+        if (x === -1 || y === -1) {
             return
         }
 
-        if(this.outputs){
-            this.outputs.Actions = prob_txt.map(m=>m.toFixed(1))
-            this.outputs.Actions2 = raw_txt.map(m=>m.toFixed(1))
-
+        if (this.outputs) {
+            this.outputs.Actions = prob_txt.map(m => m.toFixed(1))
+            this.outputs.Actions2 = raw_txt.map(m => m.toFixed(1))
+            this.outputs.map = map_arr
             // this.outputs.PartialMap = slice(map_arr, Math.max(0, x - 3), Math.min(x + 4, row - 1), Math.max(0, y - 3),  Math.min(y + 4, column-1))
-            this.outputs.PartialMap = slice(map_arr, x - 3, x + 4, y - 3,  y + 4)
+            // this.outputs.PartialMap = slice(map_arr, x - 3, x + 4, y - 3,  y + 4)
             // console.log(this.outputs.PartialMap)
         }
 
@@ -169,7 +169,7 @@ export class GameScene extends Phaser.Scene {
                 this.add.image(j * 10, i * 10, "floor").setDisplayOrigin(0, 0).setDisplaySize(10, 10)
                 if (levels[i][j] === "") continue
 
-                if(levels[i][j] === "shovel nokey"){
+                if (levels[i][j] === "shovel nokey") {
                     let img = this.add.image(j * 10, i * 10, "nokey").setDisplayOrigin(0, 0).setDisplaySize(10, 10)
                     this.images.push(img)
                     img = this.add.image(j * 10, i * 10, "shovel").setDisplayOrigin(0, 0).setDisplaySize(10, 10)

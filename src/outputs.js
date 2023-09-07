@@ -1,4 +1,6 @@
-export let outputs = (s)=> {
+import { slice } from "./utils.js"
+
+export let outputs = (s) => {
 
     s.PartialMap = []
 
@@ -14,6 +16,8 @@ export let outputs = (s)=> {
     s.Positions2 = [[0, 25], [0, 75], [0, 125], [0, 175], [0, 225], [0, 275]]
 
     s.images = {}
+
+    s.map = []
 
     s.setup = () => {
         s.createCanvas(1000, 300)
@@ -40,21 +44,25 @@ export let outputs = (s)=> {
         s.images['black'] = s.loadImage('images/oryx/black.png')
     }
 
+    s.updateMap = () => {
+        s.PartialMap = slice(map_arr, x - 3, x + 4, y - 3, y + 4)
+    }
+
     s.updateActionInfo = (actions) => {
         s.Actions = actions
     }
 
     s.draw_partial_game = () => {
-        if(s.PartialMap.length === 0) return
+        if (s.PartialMap.length === 0) return
         s.clear()
         for (let i = 0; i < s.PartialMap.length; i++) {
             for (let j = 0; j < s.PartialMap[i].length; j++) {
                 s.image(s.images['floor'], j * 24, i * 24)
                 let e = s.PartialMap[i][j]
-                if(e==='')
+                if (e === '')
                     e = 'floor'
                 s.image(s.images[e], j * 24, i * 24)
-            }            
+            }
         }
     }
 
@@ -69,7 +77,7 @@ export let outputs = (s)=> {
                 const [x2, y2] = s.Positions2[j]
 
                 s.line(x1, y1, x2, y2)
-                
+
             }
         }
 
@@ -97,7 +105,7 @@ export let outputs = (s)=> {
 
             s.fill(255 - fillColor)
             s.text(s.Actions2[i], x, y)
-            
+
         }
 
 
@@ -110,7 +118,7 @@ export let outputs = (s)=> {
             s.fill(0)
 
             s.text(s.OutputName[i], x, y)
-            
+
         }
     }
 
@@ -127,7 +135,7 @@ export let outputs = (s)=> {
         s.push()
 
         s.translate(24 * 7 + 100, 0)
-        
+
         s.draw_neural_network()
 
         s.pop()

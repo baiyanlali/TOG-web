@@ -36,7 +36,7 @@ const testPadding = () => {
     print2DArray(padding(originArr, 7, 7, -1, 0, 2))
 }
 
-const testPadding2 = ()=>{
+const testPadding2 = () => {
     const originArr = New2DArray(5, 5, 1)
 
     print2DArray(originArr)
@@ -46,7 +46,7 @@ const testPadding2 = ()=>{
     print2DArray(padding(originArr, 9, 9, -1, 0, 'a'))
 }
 
-const testSlice = ()=>{
+const testSlice = () => {
     const arr = New2DArray(5, 5, 0)
     print2DArray(arr)
     console.log()
