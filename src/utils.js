@@ -53,11 +53,11 @@ export const slice = (array, sx, ex, sy, ey, default_val = 'black') => {
         // return ret
 
         //为了使用padding写了一段非常复杂的代码，但是 it just works
-        const startx = sx < 0 ? sx : 0
-        const endx = ex > array.length ? ex : array.length
-        const starty = sy < 0 ? sy : 0
-        const endy = ey > array[0].length ? ey : array[0].length
-        const ret = padding(array, endx - startx, endy - starty, sx < 0 ? -sx : 0, sy < 0 ? -sy : 0, default_val)
+        const startx = Math.min(sx, 0)
+        const endx = Math.max(ex, array.length)
+        const starty = Math.min(sy, 0)
+        const endy = Math.max(ey, array[0].length)
+        const ret = padding(array, endx - startx, endy - starty, -startx, -starty, default_val)
         return ret.slice(sx < 0 ? 0 : sx, sx < 0 ? ex - sx : ex).map(i => i.slice(sy < 0 ? 0 : sy, sy < 0 ? ey - sy : ey))
     } else {
         return array.slice(sx, ex).map(i => i.slice(sy, ey))

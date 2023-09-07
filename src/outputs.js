@@ -1,8 +1,14 @@
-import { slice, find } from "./utils.js"
+import { slice, find, padding } from "./utils.js"
+
+
+const Unit = 24
+const OriginalImageScale = 0.6
+const GlobalImageScale = 0.3
 
 export let outputs = (s) => {
 
     s.PartialMap = []
+    s.GlobalMap = []
 
     s.Actions = [0, 0, 0, 0, 0, 0]
 
@@ -20,7 +26,7 @@ export let outputs = (s) => {
     s.map = []
 
     s.setup = () => {
-        s.createCanvas(1000, 300)
+        s.createCanvas(3000, 1000)
     }
 
     s.preload = () => {
@@ -47,28 +53,35 @@ export let outputs = (s) => {
     s.updateMap = () => {
         if (s.map.length === 0) return
         const [x, y] = find(s.map, 'nokey')
-        console.log(`x:${x}, y:${y}, ${[x - 3, x + 4, y - 3, y + 4]}`)
         s.PartialMap = slice(s.map, x - 3, x + 4, y - 3, y + 4)
-        console.log(s.PartialMap)
+
+        const [tx, ty] = [s.map.length * 2, s.map[0].length * 2]
+
+        const [qx, qy] = [parseInt(tx / 2) - x, parseInt(ty / 2) - y]
+        s.GlobalMap = padding(s.map, tx, ty, qx, qy, 'black')
     }
 
     s.updateActionInfo = (actions) => {
         s.Actions = actions
     }
 
-    s.draw_partial_game = () => {
-        if (s.PartialMap.length === 0) return
-        s.clear()
-        for (let i = 0; i < s.PartialMap.length; i++) {
-            for (let j = 0; j < s.PartialMap[i].length; j++) {
-                s.image(s.images['floor'], j * 24, i * 24)
-                let e = s.PartialMap[i][j]
+    s.draw_game = (map, scale = 1) => {
+        s.push()
+        s.scale(scale)
+        if (map.length === 0) return
+        for (let i = 0; i < map.length; i++) {
+            for (let j = 0; j < map[i].length; j++) {
+                let e = map[i][j]
+                if (e !== 'black')
+                    s.image(s.images['floor'], j * Unit, i * Unit)
                 if (e === '')
                     e = 'floor'
-                s.image(s.images[e], j * 24, i * 24)
+                s.image(s.images[e], j * Unit, i * Unit)
             }
         }
+        s.pop()
     }
+
 
     s.draw_neural_network = () => {
         s.fill(255)
@@ -126,22 +139,117 @@ export let outputs = (s) => {
         }
     }
 
+    s.draw_arrow = (sx, sy, ex, ey) => {
+        //draw line
+        s.line(sx, sy, ex, ey)
+        const angle = Math.atan2(ey - sy, ex - sx)
+        //draw arrow head
+        s.push()
+        s.translate(ex, ey, angle)
+        s.rotate(angle)
+        s.fill(0)
+        s.triangle(-10, -5, 0, 0, -10, 5)
+        s.pop()
+    }
+
     s.draw = () => {
 
+        if (s.map.length === 0) return
         s.updateMap()
 
+        const [row, column] = [s.map[0].length, s.map.length]
+
+
+        s.clear()
+
+
+        s.fill(0)
+        s.textSize(20)
+        s.textAlign(s.CENTER, s.TOP)
+
         s.push()
 
-        s.translate(0, 150 - 12 * 7)
+        s.translate(0, 30)
 
-        s.draw_partial_game()
 
-        s.pop()
+        s.text("Original Image", OriginalImageScale * Unit * row / 2, 0)
+        // s.text("Original Image", 0, 0)
 
-        s.push()
+        s.translate(0, 30)
 
-        s.translate(24 * 7 + 100, 0)
+        s.draw_game(s.map, OriginalImageScale)
 
+
+
+        {
+            // draw local observation
+            s.push()
+
+            s.translate(OriginalImageScale * Unit * row, 0)
+
+            s.draw_arrow(20, OriginalImageScale * Unit * column / 2, 100, OriginalImageScale * Unit * column / 2)
+
+            s.translate(120, 0)
+
+            s.text("Local Observation", s.PartialMap.length * Unit / 2, 0)
+
+            s.translate(0, 20)
+
+            s.draw_game(s.PartialMap)
+
+            s.translate(s.PartialMap.length * Unit, 0)
+
+            s.drawingContext.setLineDash([15, 5])
+
+            s.fill(255)
+
+            s.rect(100, 0, s.PartialMap.length * Unit, s.PartialMap.length * Unit)
+
+            s.pop()
+        }
+
+        {
+            //draw draw global observation
+            s.push()
+            s.translate(0, OriginalImageScale * Unit * column)
+            s.translate(0, 20)
+            s.draw_arrow(OriginalImageScale * Unit * row / 2, 0, OriginalImageScale * Unit * row / 2, 50)
+            s.translate(0, 70)
+
+            s.draw_game(s.GlobalMap, GlobalImageScale)
+
+            const [grow, gcolumn] = [s.GlobalMap[0].length, s.GlobalMap.length]
+
+            s.text("Global Observation", GlobalImageScale * Unit * grow / 2, GlobalImageScale * Unit * gcolumn + 20)
+
+            s.translate(GlobalImageScale * Unit * grow, 0)
+
+            s.draw_arrow(20, GlobalImageScale * Unit * gcolumn / 2, 100, GlobalImageScale * Unit * gcolumn / 2)
+
+            s.translate(20, 0)
+
+            s.fill(255)
+
+            s.drawingContext.setLineDash([15, 5])
+
+            s.rect(100, 0, GlobalImageScale * Unit * grow + 30, GlobalImageScale * Unit * gcolumn)
+
+            s.pop()
+        }
+
+        const [grow, gcolumn] = [s.GlobalMap[0].length, s.GlobalMap.length]
+
+
+        s.translate(GlobalImageScale * Unit * grow * 3 - 100, 0)
+
+        s.fill(255)
+        s.drawingContext.setLineDash([15, 5])
+
+        s.rect(0, 0, GlobalImageScale * Unit * grow + 200, GlobalImageScale * Unit * gcolumn * 2.5)
+        s.translate(GlobalImageScale * Unit * grow, 0)
+        s.fill(0)
+        s.text("FC", 150, 30)
+        s.translate(0, 100)
         s.draw_neural_network()
 
         s.pop()
