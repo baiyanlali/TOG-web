@@ -57,7 +57,7 @@ export const slice = (array, sx, ex, sy, ey, default_val = 'black') => {
         const endx = ex > array.length ? ex : array.length
         const starty = sy < 0 ? sy : 0
         const endy = ey > array[0].length ? ey : array[0].length
-        const ret = padding(array, endx - startx, endy - starty, sx < 0 ? -sx : sx, sy < 0 ? -sy : sy, default_val)
+        const ret = padding(array, endx - startx, endy - starty, sx < 0 ? -sx : 0, sy < 0 ? -sy : 0, default_val)
         return ret.slice(sx < 0 ? 0 : sx, sx < 0 ? ex - sx : ex).map(i => i.slice(sy < 0 ? 0 : sy, sy < 0 ? ey - sy : ey))
     } else {
         return array.slice(sx, ex).map(i => i.slice(sy, ey))

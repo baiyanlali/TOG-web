@@ -1,4 +1,4 @@
-import { slice } from "./utils.js"
+import { slice, find } from "./utils.js"
 
 export let outputs = (s) => {
 
@@ -45,7 +45,11 @@ export let outputs = (s) => {
     }
 
     s.updateMap = () => {
-        s.PartialMap = slice(map_arr, x - 3, x + 4, y - 3, y + 4)
+        if (s.map.length === 0) return
+        const [x, y] = find(s.map, 'nokey')
+        console.log(`x:${x}, y:${y}, ${[x - 3, x + 4, y - 3, y + 4]}`)
+        s.PartialMap = slice(s.map, x - 3, x + 4, y - 3, y + 4)
+        console.log(s.PartialMap)
     }
 
     s.updateActionInfo = (actions) => {
@@ -123,6 +127,8 @@ export let outputs = (s) => {
     }
 
     s.draw = () => {
+
+        s.updateMap()
 
         s.push()
 

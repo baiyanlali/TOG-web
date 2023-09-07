@@ -205,5 +205,4 @@ const game = new Phaser.Game(config)
 
 function onSetup(scene) {
     scene.outputs = new p5(outputs)
-    console.log(scene)
 }
