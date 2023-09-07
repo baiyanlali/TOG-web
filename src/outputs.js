@@ -77,6 +77,12 @@ export let outputs = (s) => {
                 if (e === '')
                     e = 'floor'
                 s.image(s.images[e], j * Unit, i * Unit)
+                if (e === 'nokey' || e === 'shovel nokey') {
+                    s.push()
+                    s.noFill()
+                    s.circle(j * Unit + Unit / 2, i * Unit + Unit / 2, Unit / 2)
+                    s.pop()
+                }
             }
         }
         s.pop()
