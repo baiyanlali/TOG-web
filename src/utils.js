@@ -9,7 +9,60 @@ export function New2DArray(j, k, fill){
         .map(() => Array(k).fill(fill));
 }
 
-export const slice = (array, sx, ex, sy, ey) => array.slice(sx, ex + 1).map(i => i.slice(sy, ey + 1))
+
+/** 
+* 填充二维矩阵
+* @param {Array} array - 传入矩阵
+* @param {Number} row - 矩阵长度
+* @param {Number} column - 矩阵宽度
+* @param {Number} sx - 矩阵x开始padding位置(在新的padding的数组中)
+* @param {Number} sy - 矩阵y开始padding位置(在新的padding的数组中)
+* @return {Array} 填充后的二维矩阵
+*/
+
+export const padding = (array, row, column, sx, sy, default_val = 0)=>{
+    const ret = New2DArray(row, column, default_val)
+    for (let i = sx<0?-sx:0; i < Math.min(array.length, row - sx); i++) {
+        for (let j = sy<0?-sy:0; j < Math.min(array[i].length, column - sy); j++) {
+            ret[sx + i][sy + j] = array[i][j];
+        }        
+    }
+    return ret
+}
+/**
+ * 将当前数组切出一部分
+ * @param {Array} array 输入数组
+ * @param {Number} sx 开始x(包括)
+ * @param {Number} ex 结束x(不包括)
+ * @param {Number} sy 开始y(包括)
+ * @param {Number} ey 结束y(不包括)
+ * @param {any} default_val 填充值
+ * @returns 返回数组
+ */
+export const slice = (array, sx, ex, sy, ey, default_val = 'black') => {
+    if(sx<0 || ex>=array.length || sy < 0 || ey >= array[0].length){
+        //注释掉的这一段代码也可以用，但是为了universal选了使用padding的方法
+        // const ret = New2DArray(ex - sx, ey - sy, default_val)
+        
+        // for (let i = Math.max(sx, 0); i < Math.min(ex, array.length); i++) {
+        //     for (let j = Math.max(sy, 0); j < Math.min(ey, array[i].length); j++) {
+        //         ret[i-sx][j-sy] = array[i][j]
+        //     }
+        // }
+
+        // return ret
+        
+        //为了使用padding写了一段非常复杂的代码，但是 it just works
+        const startx = sx < 0? sx: 0
+        const endx = ex > array.length ? ex : array.length
+        const starty = sy < 0? sy: 0
+        const endy = ey > array[0].length ? ey : array[0].length
+        const ret = padding(array, endx - startx, endy - starty, sx < 0 ? -sx : sx, sy < 0? -sy: sy, default_val)
+        return ret.slice(sx<0?0:sx, sx<0?ex-sx:ex).map(i => i.slice(sy<0?0:sy, sy<0?ey-sy:ey))
+    }else{
+        return array.slice(sx, ex).map(i => i.slice(sy, ey))
+    }
+}
 
 export const find = (array, key) => {
     for (let i = 0; i < array.length; i++) {
@@ -25,3 +78,14 @@ export const find = (array, key) => {
 }
 
 export const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
+
+
+export function print2DArray(arr) {
+    for (let i = 0; i < arr.length; i++) {
+        let row = "";
+        for (let j = 0; j < arr[i].length; j++) {
+            row += arr[i][j] + "\t"; // 使用制表符分隔每个元素
+        }
+        console.log(row);
+    }
+}

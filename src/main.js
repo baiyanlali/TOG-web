@@ -142,7 +142,7 @@ export class GameScene extends Phaser.Scene {
         const map_arr = this.parseLevel(play[this.index % play.length]["map"])
         const [row, column] = [map_arr.length, map_arr[0].length] 
         const [x, y] = find(map_arr, 'nokey')
-        console.log(`position: ${[x, y]}`)
+        // console.log(`position: ${[x, y]}`)
         if(x===-1 || y === -1) {
             return
         }
@@ -151,7 +151,9 @@ export class GameScene extends Phaser.Scene {
             this.outputs.Actions = prob_txt.map(m=>m.toFixed(1))
             this.outputs.Actions2 = raw_txt.map(m=>m.toFixed(1))
 
-            this.outputs.PartialMap = slice(map_arr, Math.max(0, x - 3), Math.min(x + 4, row - 1), Math.max(0, y - 3),  Math.min(y + 4, column-1))
+            // this.outputs.PartialMap = slice(map_arr, Math.max(0, x - 3), Math.min(x + 4, row - 1), Math.max(0, y - 3),  Math.min(y + 4, column-1))
+            this.outputs.PartialMap = slice(map_arr, x - 3, x + 4, y - 3,  y + 4)
+            // console.log(this.outputs.PartialMap)
         }
 
         // prob_txt = prob_txt.map(m=>m.toFixed(2)).join("<br>")
