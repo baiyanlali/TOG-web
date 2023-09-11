@@ -70,18 +70,34 @@ export let outputs = (s) => {
 
     s.draw_game = (map, scale = 1, after_draw = (px, py) => { }) => {
         s.push()
+
+
+
         s.scale(scale)
         s.strokeWeight(0)
+
+        s.push()
+        s.blendMode(s.ADD)
+        for (let i = 0; i < map.length; i++) {
+            for (let j = 0; j < map[i].length; j++) {
+                let e = map[i][j]
+                if (e === '')
+                    e = 'floor'
+                if (e !== 'black')
+                    s.image(s.images['floor'], j * Unit, i * Unit, Unit, Unit)
+                else
+                    s.image(s.images['black'], j * Unit, i * Unit, Unit, Unit)
+            }
+        }
+        s.pop()
+
         if (map.length === 0) return
         let [x, y] = [-1, -1]
         for (let i = 0; i < map.length; i++) {
             for (let j = 0; j < map[i].length; j++) {
                 let e = map[i][j]
-                if (e !== 'black')
-                    s.image(s.images['floor'], j * Unit, i * Unit)
-                if (e === '')
-                    e = 'floor'
-                s.image(s.images[e], j * Unit, i * Unit)
+                if (e !== 'black' && e !== '' && e !== 'floor')
+                    s.image(s.images[e], j * Unit, i * Unit, Unit, Unit)
                 if (e === 'nokey' || e === 'shovel nokey') {
                     [x, y] = [j, i]
 
@@ -175,7 +191,6 @@ export let outputs = (s) => {
 
         if (s.map.length === 0) return
         s.updateMap()
-
         const [row, column] = [s.map[0].length, s.map.length]
 
 
@@ -196,7 +211,41 @@ export let outputs = (s) => {
 
         s.translate(0, 30)
 
-        s.draw_game(s.map, OriginalImageScale)
+        /**
+         * c1----c2
+         * |     |
+         * |     |
+         * c3----c4
+         */
+
+        let [c1, c2, c3, c4] = [[0, 0], [0, 0], [0, 0], [0, 0]]
+        s.draw_game(s.map, OriginalImageScale, (x, y) => {
+            s.push()
+            s.push()
+            s.tint(255, 126)
+            for (let i = Math.max(x - 3, 0); i < Math.min(x + 4, s.map[0].length); i++) {
+                for (let j = Math.max(y - 3, 0); j < Math.min(y + 4, s.map.length); j++) {
+                    s.image(s.images['white'], i * Unit, j * Unit, Unit, Unit)
+                }
+            }
+            s.pop()
+
+
+            c1 = [Math.max(x - 3, 0) * Unit, Math.max(y - 3, 0) * Unit]
+            c2 = [Math.min(x + 4, s.map[0].length) * Unit, Math.max(y - 3, 0) * Unit]
+            c3 = [Math.max(x - 3, 0) * Unit, Math.min(y + 4, s.map.length) * Unit]
+            c4 = [Math.min(x + 4, s.map[0].length) * Unit, Math.min(y + 4, s.map.length) * Unit]
+
+            s.stroke(161)
+            s.strokeWeight(3)
+            // + OriginalImageScale * Unit * row
+            s.line(c1[0], c1[1], row * Unit + (120) / OriginalImageScale, (20) / OriginalImageScale)
+            s.line(c2[0], c2[1], row * Unit + (120 + s.PartialMap.length * Unit) / OriginalImageScale, (20) / OriginalImageScale)
+            s.line(c3[0], c3[1], row * Unit + (120) / OriginalImageScale, (20 + s.PartialMap.length * Unit) / OriginalImageScale)
+            s.line(c4[0], c4[1], row * Unit + (120 + s.PartialMap.length * Unit) / OriginalImageScale, (20 + s.PartialMap.length * Unit) / OriginalImageScale)
+
+            s.pop()
+        })
 
 
 
@@ -241,7 +290,19 @@ export let outputs = (s) => {
             s.draw_arrow(OriginalImageScale * Unit * row / 2, 0, OriginalImageScale * Unit * row / 2, 50)
             s.translate(0, 70)
 
-            s.draw_game(s.GlobalMap, GlobalImageScale)
+            s.draw_game(s.GlobalMap, GlobalImageScale, (x, y) => {
+                s.push()
+                s.stroke(255, 204, 0)
+                s.strokeWeight(3)
+                s.drawingContext.setLineDash([5, 5])
+                s.line(x * Unit, y * Unit + Unit / 2, 0, y * Unit + Unit / 2)
+
+                s.line(x * Unit + Unit, y * Unit + Unit / 2, x * 2 * Unit, y * Unit + Unit / 2)
+
+                s.line(x * Unit + Unit / 2, y * Unit, x * Unit + Unit / 2, 0)
+                s.line(x * Unit + Unit / 2, y * Unit + Unit, x * Unit + Unit / 2, y * 2 * Unit)
+                s.pop()
+            })
 
             const [grow, gcolumn] = [s.GlobalMap[0].length, s.GlobalMap.length]
 
