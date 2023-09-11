@@ -69,6 +69,7 @@ export let outputs = (s) => {
         s.push()
         s.scale(scale)
         if (map.length === 0) return
+        let [x, y] = [-1, -1]
         for (let i = 0; i < map.length; i++) {
             for (let j = 0; j < map[i].length; j++) {
                 let e = map[i][j]
@@ -78,13 +79,19 @@ export let outputs = (s) => {
                     e = 'floor'
                 s.image(s.images[e], j * Unit, i * Unit)
                 if (e === 'nokey' || e === 'shovel nokey') {
-                    s.push()
-                    s.noFill()
-                    s.circle(j * Unit + Unit / 2, i * Unit + Unit / 2, Unit / 2)
-                    s.pop()
+                    [x, y] = [j, i]
+
                 }
             }
         }
+
+        s.push()
+        s.stroke(255, 204, 0)
+        s.strokeWeight(3)
+        s.noFill()
+        s.circle(x * Unit + Unit / 2, y * Unit + Unit / 2, Unit)
+        s.pop()
+
         s.pop()
     }
 
