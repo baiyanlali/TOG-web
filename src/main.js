@@ -133,7 +133,6 @@ export class GameScene extends Phaser.Scene {
     nextStep() {
         this.index++
         this.change = true
-
     }
 
     updateProbInfo() {
@@ -205,4 +204,5 @@ const game = new Phaser.Game(config)
 
 function onSetup(scene) {
     scene.outputs = new p5(outputs)
+    scene.nextStep()
 }

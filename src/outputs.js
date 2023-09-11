@@ -47,7 +47,10 @@ export let outputs = (s) => {
         s.images['monsterChest'] = s.loadImage('images/oryx/trapChest1.png')
         s.images['wall'] = s.loadImage('images/oryx/dirtWall_0.png')
         s.images['key'] = s.loadImage('images/oryx/key2.png')
-        s.images['black'] = s.loadImage('images/oryx/black.png')
+        s.images['black'] = s.loadImage('images/black.png')
+        s.images['white'] = s.loadImage('images/white.png')
+        s.images['l1'] = s.loadImage('images/l1.png')
+        s.images['l2'] = s.loadImage('images/l2.png')
     }
 
     s.updateMap = () => {
@@ -65,9 +68,10 @@ export let outputs = (s) => {
         s.Actions = actions
     }
 
-    s.draw_game = (map, scale = 1) => {
+    s.draw_game = (map, scale = 1, after_draw = (px, py) => { }) => {
         s.push()
         s.scale(scale)
+        s.strokeWeight(0)
         if (map.length === 0) return
         let [x, y] = [-1, -1]
         for (let i = 0; i < map.length; i++) {
@@ -91,6 +95,8 @@ export let outputs = (s) => {
         s.noFill()
         s.circle(x * Unit + Unit / 2, y * Unit + Unit / 2, Unit)
         s.pop()
+
+        after_draw(x, y)
 
         s.pop()
     }
@@ -216,7 +222,13 @@ export let outputs = (s) => {
 
             s.fill(255)
 
-            s.rect(100, 0, s.PartialMap.length * Unit, s.PartialMap.length * Unit)
+            const zoom = 2
+
+            const [sizex, sizey] = [500 / zoom, 400 / zoom]
+
+            s.rect(100, 0, sizex + 100, sizey)
+
+            s.image(s.images['l1'], 100 + 3, 3, sizex - 6, sizey - 6)
 
             s.pop()
         }
@@ -245,7 +257,12 @@ export let outputs = (s) => {
 
             s.drawingContext.setLineDash([15, 5])
 
-            s.rect(100, 0, GlobalImageScale * Unit * grow + 30, GlobalImageScale * Unit * gcolumn)
+            const zoom = 2.5
+
+            const [sizex, sizey] = [200 * zoom, 100 * zoom]
+
+            s.rect(100, 0, sizex + 120, sizey)
+            s.image(s.images['l2'], 100 + 3, 3, sizex - 6, sizey - 6)
 
             s.pop()
         }
@@ -253,7 +270,8 @@ export let outputs = (s) => {
         const [grow, gcolumn] = [s.GlobalMap[0].length, s.GlobalMap.length]
 
 
-        s.translate(GlobalImageScale * Unit * grow * 3 - 100, 0)
+        s.translate(GlobalImageScale * Unit * grow * 3 + 20
+            , 20)
 
         s.fill(255)
         s.drawingContext.setLineDash([15, 5])
@@ -263,6 +281,7 @@ export let outputs = (s) => {
         s.fill(0)
         s.text("FC", 150, 30)
         s.translate(0, 100)
+        s.drawingContext.setLineDash([1])
         s.draw_neural_network()
 
         s.pop()
