@@ -271,13 +271,10 @@ export let outputs = (s) => {
 
                 s.translate(s.PartialMap.length * Unit, 0)
 
-                {
-                    s.push()
-                    s.text('Kernel Size = 2\nStride = 1\nPadding = 0', 80, -80)
-                    s.draw_arrow(80, 0, 80, 80)
-                    s.pop()
-                }
+                s.text('Kernel Size = 2\nStride = 1\nPadding = 0', 80, -80)
+                s.draw_arrow(80, 0, 80, 80)
 
+                s.push()
                 s.drawingContext.setLineDash([15, 5])
 
 
@@ -292,36 +289,44 @@ export let outputs = (s) => {
                 // s.blendMode(s.BLEND)
 
                 s.image(s.images['l1'], 100 + 3, 3, sizex - 6, sizey - 6)
+                s.pop()
+
+                s.translate(sizex + 100, 0)
+
+                s.circle(0, 0, 20)
 
                 s.pop()
 
-                s.push()
-                s.push()
-                s.tint(255, 126)
-                for (let i = x; i < x + 2; i++) {
-                    for (let j = y; j < y + 2; j++) {
-                        s.image(s.images['white'], Unit * j, Unit * i)
+                {
+                    s.push()
+
+                    s.push()
+                    s.tint(255, 126)
+                    for (let i = x; i < x + 2; i++) {
+                        for (let j = y; j < y + 2; j++) {
+                            s.image(s.images['white'], Unit * j, Unit * i)
+                        }
+
                     }
+                    s.pop()
 
+                    s.stroke(161)
+                    let [c1, c2, c3, c4] = [
+                        [x * Unit, y * Unit],
+                        [(x + 2) * Unit, y * Unit],
+                        [(x + 2) * Unit, (y + 2) * Unit],
+                        [x * Unit, (y + 2) * Unit]
+
+                    ]
+
+                    s.strokeWeight(2)
+                    s.line(c1[0], c1[1], s.PartialMap.length * Unit + 100 + 80, s.PartialMap.length * Unit / 2 + 40)
+                    s.line(c2[0], c2[1], s.PartialMap.length * Unit + 100 + 80, s.PartialMap.length * Unit / 2 + 40)
+                    s.line(c3[0], c3[1], s.PartialMap.length * Unit + 100 + 80, s.PartialMap.length * Unit / 2 + 40)
+                    s.line(c4[0], c4[1], s.PartialMap.length * Unit + 100 + 80, s.PartialMap.length * Unit / 2 + 40)
+
+                    s.pop()
                 }
-                s.pop()
-
-                s.stroke(161)
-                let [c1, c2, c3, c4] = [
-                    [x * Unit, y * Unit],
-                    [(x + 2) * Unit, y * Unit],
-                    [(x + 2) * Unit, (y + 2) * Unit],
-                    [x * Unit, (y + 2) * Unit]
-
-                ]
-
-                s.strokeWeight(2)
-                s.line(c1[0], c1[1], s.PartialMap.length * Unit + 100 + 80, s.PartialMap.length * Unit / 2 + 40)
-                s.line(c2[0], c2[1], s.PartialMap.length * Unit + 100 + 80, s.PartialMap.length * Unit / 2 + 40)
-                s.line(c3[0], c3[1], s.PartialMap.length * Unit + 100 + 80, s.PartialMap.length * Unit / 2 + 40)
-                s.line(c4[0], c4[1], s.PartialMap.length * Unit + 100 + 80, s.PartialMap.length * Unit / 2 + 40)
-
-                s.pop()
             })
             s.pop()
         }
@@ -422,9 +427,8 @@ export let outputs = (s) => {
         const [grow, gcolumn] = [s.GlobalMap[0].length, s.GlobalMap.length]
 
 
-        s.translate(GlobalImageScale * Unit * grow * 3 + 20
-            , 20)
-
+        s.translate(GlobalImageScale * Unit * grow * 3 + 20, 20)
+        s.noFill()
         s.fill(255)
         s.drawingContext.setLineDash([15, 5])
 
