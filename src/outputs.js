@@ -218,7 +218,6 @@ export let outputs = (s) => {
          * c3----c4
          */
 
-        let [c1, c2, c3, c4] = [[0, 0], [0, 0], [0, 0], [0, 0]]
         s.draw_game(s.map, OriginalImageScale, (x, y) => {
             s.push()
             s.push()
@@ -230,6 +229,7 @@ export let outputs = (s) => {
             }
             s.pop()
 
+            let [c1, c2, c3, c4] = [[0, 0], [0, 0], [0, 0], [0, 0]]
 
             c1 = [Math.max(x - 3, 0) * Unit, Math.max(y - 3, 0) * Unit]
             c2 = [Math.min(x + 4, s.map[0].length) * Unit, Math.max(y - 3, 0) * Unit]
@@ -263,22 +263,66 @@ export let outputs = (s) => {
 
             s.translate(0, 20)
 
-            s.draw_game(s.PartialMap)
+            s.draw_game(s.PartialMap, 1, (x, y) => {
 
-            s.translate(s.PartialMap.length * Unit, 0)
+                s.push()
 
-            s.drawingContext.setLineDash([15, 5])
+                s.strokeWeight(1)
 
-            s.fill(255)
+                s.translate(s.PartialMap.length * Unit, 0)
 
-            const zoom = 2
+                {
+                    s.push()
+                    s.text('Kernel Size = 2\nStride = 1\nPadding = 0', 80, -80)
+                    s.draw_arrow(80, 0, 80, 80)
+                    s.pop()
+                }
 
-            const [sizex, sizey] = [500 / zoom, 400 / zoom]
+                s.drawingContext.setLineDash([15, 5])
 
-            s.rect(100, 0, sizex + 100, sizey)
 
-            s.image(s.images['l1'], 100 + 3, 3, sizex - 6, sizey - 6)
+                s.noFill()
 
+                const zoom = 2
+
+                const [sizex, sizey] = [500 / zoom, 400 / zoom]
+
+                s.rect(100, 0, sizex + 100, sizey)
+
+                // s.blendMode(s.BLEND)
+
+                s.image(s.images['l1'], 100 + 3, 3, sizex - 6, sizey - 6)
+
+                s.pop()
+
+                s.push()
+                s.push()
+                s.tint(255, 126)
+                for (let i = x; i < x + 2; i++) {
+                    for (let j = y; j < y + 2; j++) {
+                        s.image(s.images['white'], Unit * j, Unit * i)
+                    }
+
+                }
+                s.pop()
+
+                s.stroke(161)
+                let [c1, c2, c3, c4] = [
+                    [x * Unit, y * Unit],
+                    [(x + 2) * Unit, y * Unit],
+                    [(x + 2) * Unit, (y + 2) * Unit],
+                    [x * Unit, (y + 2) * Unit]
+
+                ]
+
+                s.strokeWeight(2)
+                s.line(c1[0], c1[1], s.PartialMap.length * Unit + 100 + 80, s.PartialMap.length * Unit / 2 + 40)
+                s.line(c2[0], c2[1], s.PartialMap.length * Unit + 100 + 80, s.PartialMap.length * Unit / 2 + 40)
+                s.line(c3[0], c3[1], s.PartialMap.length * Unit + 100 + 80, s.PartialMap.length * Unit / 2 + 40)
+                s.line(c4[0], c4[1], s.PartialMap.length * Unit + 100 + 80, s.PartialMap.length * Unit / 2 + 40)
+
+                s.pop()
+            })
             s.pop()
         }
 
@@ -302,28 +346,75 @@ export let outputs = (s) => {
                 s.line(x * Unit + Unit / 2, y * Unit, x * Unit + Unit / 2, 0)
                 s.line(x * Unit + Unit / 2, y * Unit + Unit, x * Unit + Unit / 2, y * 2 * Unit)
                 s.pop()
+                {
+                    s.push()
+
+                    s.strokeWeight(1)
+
+                    s.scale(1 / GlobalImageScale)
+
+                    const [grow, gcolumn] = [s.GlobalMap[0].length, s.GlobalMap.length]
+
+                    s.text("Global Observation", GlobalImageScale * Unit * grow / 2, GlobalImageScale * Unit * gcolumn + 20)
+
+                    // draw arrow
+                    s.translate(GlobalImageScale * Unit * grow, 0)
+
+                    s.draw_arrow(20, GlobalImageScale * Unit * gcolumn / 2, 100, GlobalImageScale * Unit * gcolumn / 2)
+
+                    s.text('Kernel size = 4\nStride = 3\nPadding = 0', 80, GlobalImageScale * Unit * gcolumn + 50)
+                    s.draw_arrow(80, GlobalImageScale * Unit * gcolumn + 40, 80, GlobalImageScale * Unit * gcolumn)
+
+                    //draw Conv-G
+                    s.translate(20, 0)
+
+                    s.noFill()
+
+                    s.push()
+                    s.drawingContext.setLineDash([15, 5])
+
+                    const zoom = 2.5
+
+                    const [sizex, sizey] = [200 * zoom, 100 * zoom]
+                    s.rect(100, 0, sizex + 120, sizey)
+                    s.image(s.images['l2'], 100 + 3, 3, sizex - 6, sizey - 6)
+                    s.pop()
+                    s.strokeWeight(1)
+                    s.fill(0)
+                    s.text('Kernel size = 3\nStride = 2\nPadding = 0', 350, 270)
+                    s.draw_arrow(350, 260, 350, 200)
+                    s.pop()
+                }
+                {
+                    s.push()
+                    s.tint(255, 126)
+
+                    for (let i = x; i < x + 4; i++) {
+                        for (let j = y; j < y + 4; j++) {
+                            s.image(s.images['white'], i * Unit, j * Unit)
+                        }
+                    }
+                    s.pop()
+
+                    let [c1, c2, c3, c4] = [
+                        [x * Unit, y * Unit],
+                        [(x + 4) * Unit, y * Unit],
+                        [(x + 4) * Unit, (y + 4) * Unit],
+                        [x * Unit, (y + 4) * Unit]
+
+                    ]
+
+                    s.strokeWeight(2 / GlobalImageScale)
+                    s.stroke(120)
+                    s.line(c1[0], c1[1], s.GlobalMap[0].length * Unit + (220) / GlobalImageScale, s.GlobalMap.length * Unit / 2 + 40 / GlobalImageScale)
+                    s.line(c2[0], c2[1], s.GlobalMap[0].length * Unit + (220) / GlobalImageScale, s.GlobalMap.length * Unit / 2 + 40 / GlobalImageScale)
+                    s.line(c3[0], c3[1], s.GlobalMap[0].length * Unit + (220) / GlobalImageScale, s.GlobalMap.length * Unit / 2 + 40 / GlobalImageScale)
+                    s.line(c4[0], c4[1], s.GlobalMap[0].length * Unit + (220) / GlobalImageScale, s.GlobalMap.length * Unit / 2 + 40 / GlobalImageScale)
+
+                }
+
             })
 
-            const [grow, gcolumn] = [s.GlobalMap[0].length, s.GlobalMap.length]
-
-            s.text("Global Observation", GlobalImageScale * Unit * grow / 2, GlobalImageScale * Unit * gcolumn + 20)
-
-            s.translate(GlobalImageScale * Unit * grow, 0)
-
-            s.draw_arrow(20, GlobalImageScale * Unit * gcolumn / 2, 100, GlobalImageScale * Unit * gcolumn / 2)
-
-            s.translate(20, 0)
-
-            s.fill(255)
-
-            s.drawingContext.setLineDash([15, 5])
-
-            const zoom = 2.5
-
-            const [sizex, sizey] = [200 * zoom, 100 * zoom]
-
-            s.rect(100, 0, sizex + 120, sizey)
-            s.image(s.images['l2'], 100 + 3, 3, sizex - 6, sizey - 6)
 
             s.pop()
         }
