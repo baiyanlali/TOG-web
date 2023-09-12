@@ -284,7 +284,7 @@ export let outputs = (s) => {
 
                 const [sizex, sizey] = [500 / zoom, 400 / zoom]
 
-                s.rect(100, 0, sizex + 100, sizey)
+                s.rect(100, 0, sizex + 50, sizey + 20)
 
                 // s.blendMode(s.BLEND)
 
@@ -293,7 +293,49 @@ export let outputs = (s) => {
 
                 s.translate(sizex + 100, 0)
 
-                s.circle(0, 0, 20)
+                s.strokeWeight(0)
+                s.fill(132, 151, 176)
+                s.circle(0, 20, 25)
+                s.circle(0, 50, 25)
+                s.circle(0, 80, 10)
+                s.circle(0, 100, 10)
+                s.circle(0, 120, 10)
+                s.circle(0, 150, 25)
+                s.circle(0, 180, 25)
+
+                s.fill(0)
+                s.text('256', 0, 200)
+
+                //draw line
+
+                const line_start = [
+                    [15, 20],
+                    [15, 50],
+                    [15, 100],
+                    [15, 150],
+                    [15, 180],
+                ]
+
+                const line_end = [
+                    [180, 50],
+                    [180, 100],
+                    [180, 150],
+                    [180, 200],
+                    [180, 260],
+                    [180, 320],
+                    [180, 370],
+                    [180, 420],
+                    [180, 470],
+                ]
+
+                s.strokeWeight(1)
+                s.stroke(161)
+
+                for (const start of line_start) {
+                    for (const end of line_end) {
+                        s.line(start[0], start[1], end[0], end[1])
+                    }
+                }
 
                 s.pop()
 
@@ -381,9 +423,60 @@ export let outputs = (s) => {
                     const zoom = 2.5
 
                     const [sizex, sizey] = [200 * zoom, 100 * zoom]
-                    s.rect(100, 0, sizex + 120, sizey)
-                    s.image(s.images['l2'], 100 + 3, 3, sizex - 6, sizey - 6)
+                    s.rect(100, 0, sizex + 70, sizey)
+                    s.image(s.images['l2'], 100 + 3, 3, sizex - 6 + 20, sizey - 6)
                     s.pop()
+
+                    s.push()
+                    {
+                        s.translate(120 + sizex, 10)
+
+                        s.strokeWeight(0)
+                        s.fill(132, 151, 176)
+                        s.circle(0, 20, 25)
+                        s.circle(0, 50, 25)
+                        s.circle(0, 80, 10)
+                        s.circle(0, 100, 10)
+                        s.circle(0, 120, 10)
+                        s.circle(0, 150, 25)
+                        s.circle(0, 180, 25)
+                        s.fill(0)
+                        s.text('256', 0, 210)
+
+                        //draw line
+
+                        const line_start = [
+                            [15, 20],
+                            [15, 50],
+                            [15, 100],
+                            [15, 150],
+                            [15, 180],
+                        ]
+
+                        const line_end = [
+                            [180 - 2, 5 - 300 + 50],
+                            [180 - 2, 5 - 300 + 100],
+                            [180 - 2, 5 - 300 + 150],
+                            [180 - 2, 5 - 300 + 200],
+                            [180 - 2, 5 - 300 + 260],
+                            [180 - 2, 5 - 300 + 320],
+                            [180 - 2, 5 - 300 + 370],
+                            [180 - 2, 5 - 300 + 420],
+                            [180 - 2, 5 - 300 + 470],
+                        ]
+
+                        s.strokeWeight(1)
+                        s.stroke(161)
+
+                        for (const start of line_start) {
+                            for (const end of line_end) {
+                                s.line(start[0], start[1], end[0], end[1])
+                            }
+                        }
+                    }
+                    s.pop()
+
+
                     s.strokeWeight(1)
                     s.fill(0)
                     s.text('Kernel size = 3\nStride = 2\nPadding = 0', 350, 270)
@@ -426,10 +519,85 @@ export let outputs = (s) => {
 
         const [grow, gcolumn] = [s.GlobalMap[0].length, s.GlobalMap.length]
 
-
+        // s.circle(0, 0, 30)
         s.translate(GlobalImageScale * Unit * grow * 3 + 20, 20)
+        s.text('Full Connected\n(256+256) X 512', -30, GlobalImageScale * Unit * gcolumn * 2.5 + 20)
+        s.text('Full Connected\n512 X 64', 200, GlobalImageScale * Unit * gcolumn * 2.5 + 20)
+        s.text('Full Connected\n512 X 64', 400, GlobalImageScale * Unit * gcolumn * 2.5 + 20)
+
+        s.fill(132, 151, 176)
+
+        s.strokeWeight(0)
+        s.circle(50, 50, 30)
+        s.circle(50, 100, 30)
+        s.circle(50, 150, 30)
+        s.circle(50, 200, 30)
+        s.circle(50, 240, 10)
+        s.circle(50, 260, 10)
+        s.circle(50, 280, 10)
+        s.circle(50, 320, 30)
+        s.circle(50, 370, 30)
+        s.circle(50, 420, 30)
+        s.circle(50, 470, 30)
+
+
+        s.circle(200, 100, 30)
+        s.circle(200, 150, 30)
+        s.circle(200, 200, 30)
+        s.circle(200, 240, 10)
+        s.circle(200, 260, 10)
+        s.circle(200, 280, 10)
+        s.circle(200, 320, 30)
+        s.circle(200, 370, 30)
+        s.circle(200, 420, 30)
+        s.fill(0)
+
+        s.text('512', 50, 500)
+        s.text('64', 200, 500)
+        s.text('Number of actions', 400, 500)
+
+
+
+        const line_start = [
+            [50 + 20, 50],
+            [50 + 20, 100],
+            [50 + 20, 150],
+            [50 + 20, 200],
+            [50 + 20, 260],
+            [50 + 20, 320],
+            [50 + 20, 370],
+            [50 + 20, 420],
+            [50 + 20, 470],
+        ]
+
+        const line_end = [
+            [200 - 20, 100],
+            [200 - 20, 150],
+            [200 - 20, 200],
+            [200 - 20, 260],
+            [200 - 20, 320],
+            [200 - 20, 370],
+            [200 - 20, 420],
+        ]
+
+        s.strokeWeight(1)
+        s.stroke(161)
+
+        for (const start of line_start) {
+            for (const end of line_end) {
+                s.line(start[0], start[1], end[0], end[1])
+            }
+        }
+
+        for (const start of s.Positions2) {
+            for (const end of line_end) {
+                s.line(start[0] + GlobalImageScale * Unit * grow - 30, start[1] + 100, end[0] + 40, end[1])
+            }
+        }
+
+
         s.noFill()
-        s.fill(255)
+        s.stroke(0)
         s.drawingContext.setLineDash([15, 5])
 
         s.rect(0, 0, GlobalImageScale * Unit * grow + 200, GlobalImageScale * Unit * gcolumn * 2.5)
@@ -438,6 +606,7 @@ export let outputs = (s) => {
         s.text("FC", 150, 30)
         s.translate(0, 100)
         s.drawingContext.setLineDash([1])
+        s.stroke(161)
         s.draw_neural_network()
 
         s.pop()
