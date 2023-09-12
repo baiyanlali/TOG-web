@@ -40,7 +40,8 @@ export let outputs = (s) => {
     s.map = []
 
     s.setup = () => {
-        s.createCanvas(3000, 1000)
+        let canvas = s.createCanvas(1500, 600)
+        canvas.parent('gameSystem')
     }
 
     s.preload = () => {
@@ -214,6 +215,8 @@ export let outputs = (s) => {
         s.textAlign(s.CENTER, s.TOP)
 
         s.push()
+
+        s.scale(0.8)
 
         s.translate(0, 30)
 
