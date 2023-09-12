@@ -1,3 +1,30 @@
+body {
+  /* margin: 0; */
+  font-family: Arial, sans-serif; /* Set the background color to white */
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+@media screen and (max-width: 1000px) {
+  .container {
+    padding: 0;
+  }
+
+  .txtimg {
+    flex-direction: column;
+  }
+}
+
+.txtimg {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
 .button {
   display: inline-block;
   border-radius: 4px;

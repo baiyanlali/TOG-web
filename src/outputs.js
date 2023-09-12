@@ -11,8 +11,10 @@ export let outputs = (s) => {
     s.GlobalMap = []
 
     s.Actions = [0, 0, 0, 0, 0, 0]
+    s.ActionsPrev = [0, 0, 0, 0, 0, 0]
 
     s.Actions2 = [0, 0, 0, 0, 0, 0]
+    s.Actions2Prev = [0, 0, 0, 0, 0, 0]
 
     s.OutputName = ['stay', 'dig', 'left', 'right', 'down', 'up']
 
@@ -144,6 +146,14 @@ export let outputs = (s) => {
         s.pop()
     }
 
+    s.setValue = (a1, a2, map) => {
+        s.ActionsPrev = s.Actions
+        s.Actions2Prev = s.Actions2
+        s.Actions = a1
+        s.Actions2 = a2
+        s.map = map
+    }
+
 
     s.draw_neural_network = () => {
         s.fill(255)
@@ -158,19 +168,6 @@ export let outputs = (s) => {
 
         }
 
-        for (let i = 0; i < s.Positions.length; i++) {
-            const position = s.Positions[i]
-            const [x, y] = position
-
-            const fillColor = s.Actions[i] * 255
-
-            s.fill(fillColor)
-            s.circle(x, y, 40)
-
-            s.fill(255 - fillColor)
-            s.text(s.Actions[i], x, y)
-        }
-
         for (let i = 0; i < s.Positions2.length; i++) {
             const position = s.Positions2[i]
             const [x, y] = position
@@ -183,6 +180,19 @@ export let outputs = (s) => {
             s.fill(255 - fillColor)
             s.text(s.Actions2[i], x, y)
 
+        }
+
+        for (let i = 0; i < s.Positions.length; i++) {
+            const position = s.Positions[i]
+            const [x, y] = position
+
+            const fillColor = s.Actions[i] * 255
+
+            s.fill(fillColor)
+            s.circle(x, y, 40)
+
+            s.fill(255 - fillColor)
+            s.text(s.Actions[i], x, y)
         }
 
 
