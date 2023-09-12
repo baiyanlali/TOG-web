@@ -17,9 +17,23 @@ export let outputs = (s) => {
     s.OutputName = ['stay', 'dig', 'left', 'right', 'down', 'up']
 
     // s.Positions = [[75, 25], [75, 75], [25, 75], [125, 75], [50, 125], [100, 125]]
-    s.Positions = [[100, 25], [100, 75], [100, 125], [100, 175], [100, 225], [100, 275]]
+    s.Positions = [
+        [150, 25],
+        [150, 75],
+        [150, 125],
+        [150, 175],
+        [150, 225],
+        [150, 275]
+    ]
 
-    s.Positions2 = [[0, 25], [0, 75], [0, 125], [0, 175], [0, 225], [0, 275]]
+    s.Positions2 = [
+        [0, 25],
+        [0, 75],
+        [0, 125],
+        [0, 175],
+        [0, 225],
+        [0, 275]
+    ]
 
     s.images = {}
 
@@ -124,13 +138,11 @@ export let outputs = (s) => {
         s.textAlign(s.CENTER, s.CENTER)
 
         for (let i = 0; i < s.Positions.length; i++) {
-            for (let j = 0; j < s.Positions2.length; j++) {
-                const [x1, y1] = s.Positions[i]
-                const [x2, y2] = s.Positions2[j]
+            const [x1, y1] = s.Positions[i]
+            const [x2, y2] = s.Positions2[i]
 
-                s.line(x1, y1, x2, y2)
+            s.draw_arrow(x2 + 40, y2, x1 - 40, y1)
 
-            }
         }
 
         for (let i = 0; i < s.Positions.length; i++) {
@@ -523,7 +535,7 @@ export let outputs = (s) => {
         s.translate(GlobalImageScale * Unit * grow * 3 + 20, 20)
         s.text('Full Connected\n(256+256) X 512', -30, GlobalImageScale * Unit * gcolumn * 2.5 + 20)
         s.text('Full Connected\n512 X 64', 200, GlobalImageScale * Unit * gcolumn * 2.5 + 20)
-        s.text('Full Connected\n512 X 64', 400, GlobalImageScale * Unit * gcolumn * 2.5 + 20)
+        s.text('Full Connected\n512 X 64', 450, GlobalImageScale * Unit * gcolumn * 2.5 + 20)
 
         s.fill(132, 151, 176)
 
@@ -554,7 +566,7 @@ export let outputs = (s) => {
 
         s.text('512', 50, 500)
         s.text('64', 200, 500)
-        s.text('Number of actions', 400, 500)
+        s.text('Number of actions', 450, 500)
 
 
 
@@ -600,7 +612,7 @@ export let outputs = (s) => {
         s.stroke(0)
         s.drawingContext.setLineDash([15, 5])
 
-        s.rect(0, 0, GlobalImageScale * Unit * grow + 200, GlobalImageScale * Unit * gcolumn * 2.5)
+        s.rect(0, 0, GlobalImageScale * Unit * grow + 250, GlobalImageScale * Unit * gcolumn * 2.5)
         s.translate(GlobalImageScale * Unit * grow, 0)
         s.fill(0)
         s.text("FC", 150, 30)
