@@ -39,9 +39,21 @@ export let outputs = (s) => {
 
     s.map = []
 
+    s.resizeWhole = 1
     s.setup = () => {
-        let canvas = s.createCanvas(1500, 600)
-        canvas.parent('gameSystem')
+        // let canvas = s.createCanvas(1500, 600)
+        s.canvas = s.createCanvas(1500, 600)
+        s.canvas.parent('gameSystem')
+        s.parent = s.canvas.elt.parentElement
+        const [height, width] = [s.parent.clientHeight, s.parent.clientWidth]
+        s.resizeCanvas(width, 600 * width / 1500)
+        s.resizeWhole = width / 1500 * 0.8
+    }
+
+    s.windowResized = () => {
+        const [height, width] = [s.parent.clientHeight, s.parent.clientWidth]
+        s.resizeCanvas(width, 600 * width / 1500)
+        s.resizeWhole = width / 1500 * 0.8
     }
 
     s.preload = () => {
@@ -216,7 +228,7 @@ export let outputs = (s) => {
 
         s.push()
 
-        s.scale(0.8)
+        s.scale(s.resizeWhole)
 
         s.translate(0, 30)
 
