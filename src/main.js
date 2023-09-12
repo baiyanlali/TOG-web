@@ -148,7 +148,7 @@ export class GameScene extends Phaser.Scene {
         // }
 
         if (this.outputs) {
-            this.outputs.setValue(prob_txt.map(m => m.toFixed(1)), raw_txt.map(m => m.toFixed(1)), map_arr)
+            this.outputs.setValue(prob_txt.map(m => parseFloat(m).toFixed(1)), raw_txt.map(m => parseFloat(m).toFixed(1)), map_arr)
             // this.outputs.Actions = prob_txt.map(m => m.toFixed(1))
             // this.outputs.Actions2 = raw_txt.map(m => m.toFixed(1))
             // this.outputs.map = map_arr

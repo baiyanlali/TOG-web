@@ -1,4 +1,4 @@
-import { slice, find, padding } from "./utils.js"
+import { slice, find, padding, minus, temperatureToColor } from "./utils.js"
 
 
 const Unit = 24
@@ -11,12 +11,16 @@ export let outputs = (s) => {
     s.GlobalMap = []
 
     s.Actions = [0, 0, 0, 0, 0, 0]
-    s.ActionsPrev = [0, 0, 0, 0, 0, 0]
+    s.ActionsTarget = [0, 0, 0, 0, 0, 0]
 
     s.Actions2 = [0, 0, 0, 0, 0, 0]
-    s.Actions2Prev = [0, 0, 0, 0, 0, 0]
+    s.Actions2Target = [0, 0, 0, 0, 0, 0]
+    s.Actions2Diff = [0, 0, 0, 0, 0, 0]
 
     s.OutputName = ['stay', 'dig', 'left', 'right', 'down', 'up']
+
+    s.tween = null
+    s.tween2 = null
 
     // s.Positions = [[75, 25], [75, 75], [25, 75], [125, 75], [50, 125], [100, 125]]
     s.Positions = [
@@ -50,6 +54,10 @@ export let outputs = (s) => {
         const [height, width] = [s.parent.clientHeight, s.parent.clientWidth]
         s.resizeCanvas(width, 600 * width / 1500)
         s.resizeWhole = width / 1500 * 0.8
+
+
+        s.tween = new TWEEN.Tween(s.Actions)
+        s.tween2 = new TWEEN.Tween(s.Actions2)
     }
 
     s.windowResized = () => {
@@ -147,10 +155,19 @@ export let outputs = (s) => {
     }
 
     s.setValue = (a1, a2, map) => {
-        s.ActionsPrev = s.Actions
-        s.Actions2Prev = s.Actions2
-        s.Actions = a1
-        s.Actions2 = a2
+        s.ActionsTarget = a1
+        s.Actions2Target = a2
+        // if(s.tween)
+        //     s.tween.stop()
+        // if(s.tween2)
+        //     s.tween2.stop()
+        s.Actions2Diff = minus(s.Actions2, s.Actions2Target)
+        console.log(s.Actions2Diff)
+        s.tween?.to(s.ActionsTarget, 100).start(undefined, false)
+        s.tween2?.to(s.Actions2Target, 100).start(undefined, false)
+        
+        // s.Actions = a1
+        // s.Actions2 = a2
         s.map = map
     }
 
@@ -172,13 +189,13 @@ export let outputs = (s) => {
             const position = s.Positions2[i]
             const [x, y] = position
 
-            const fillColor = s.Actions2[i] * 255
+            const fillColor = temperatureToColor(s.Actions2Diff[i] +( s.Actions2Target[i] - s.Actions2[i])/10)
 
             s.fill(fillColor)
             s.circle(x, y, 40)
 
-            s.fill(255 - fillColor)
-            s.text(s.Actions2[i], x, y)
+            s.fill(0)
+            s.text(`${s.Actions2[i].toFixed(1)}`, x, y)
 
         }
 
@@ -192,7 +209,7 @@ export let outputs = (s) => {
             s.circle(x, y, 40)
 
             s.fill(255 - fillColor)
-            s.text(s.Actions[i], x, y)
+            s.text(`${s.Actions[i].toFixed(1)}`, x, y)
         }
 
 
@@ -237,6 +254,9 @@ export let outputs = (s) => {
         s.textAlign(s.CENTER, s.TOP)
 
         s.push()
+
+        s.tween.update()
+        s.tween2.update()
 
         s.scale(s.resizeWhole)
 

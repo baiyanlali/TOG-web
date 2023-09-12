@@ -89,3 +89,45 @@ export function print2DArray(arr) {
         console.log(row);
     }
 }
+
+export function minus(arr1, arr2){
+    const arr = []
+    for (let i = 0; i < Math.min(arr1.length, arr2.length); i++) {
+        arr.push(arr1[i] - arr2[i])        
+    }
+    return arr
+}
+
+
+// Code from https://stackoverflow.com/questions/65361477/how-to-generate-color-from-colormap-in-javascript
+// Author: https://stackoverflow.com/users/12466239/robert
+
+
+  
+const scale = {
+min: {value: -50, hue: 1},
+max: {value: 50, hue: 245}
+} 
+
+export function temperatureToColor(temp){
+
+    function hslToHex(h, s, l) {
+        l /= 100;
+        const a = s * Math.min(l, 1 - l) / 100;
+        const f = n => {
+          const k = (n + h / 30) % 12;
+          const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+          return Math.round(255 * color).toString(16).padStart(2, '0');  
+        };
+        return `#${f(0)}${f(8)}${f(4)}`;
+    }
+
+    temp = Math.min(scale.max.value, Math.max(scale.min.value, temp));
+    const range = scale.max.value - scale.min.value;
+    const hueRange = scale.max.hue - scale.min.hue;
+    const value =  (temp - scale.min.value) / range;
+    const hue = scale.max.hue - hueRange * value;
+    
+    return hslToHex(hue, 100, 50)
+}
+  
