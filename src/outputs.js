@@ -67,27 +67,27 @@ export let outputs = (s) => {
     }
 
     s.preload = () => {
-        s.images['floor'] = s.loadImage('images/oryx/backLBrown.png')
-        s.images['gold'] = s.loadImage('images/oryx/gold2.png')
-        s.images['diamond'] = s.loadImage('images/oryx/diamond1.png')
-        s.images['treasure'] = s.loadImage('images/oryx/treasure1.png')
-        s.images['chest'] = s.loadImage('images/oryx/treasure2.png')
-        s.images['trapchest'] = s.loadImage('images/oryx/treasure2.png')
-        s.images['shovel'] = s.loadImage('images/oryx/pickaxe.png')
-        s.images['avatar'] = s.loadImage('images/oryx/axeman1.png')
-        s.images['nokey'] = s.loadImage('images/oryx/axeman1.png')
-        s.images['shovel nokey'] = s.loadImage('images/oryx/axeman1.png')
-        s.images['withkey'] = s.loadImage('images/oryx/axeman1.png')
-        s.images['monsterQuick'] = s.loadImage('images/oryx/bat1.png')
-        s.images['monsterNormal'] = s.loadImage('images/oryx/spider2.png')
-        s.images['monsterSlow'] = s.loadImage('images/oryx/scorpion1.png')
-        s.images['monsterChest'] = s.loadImage('images/oryx/trapChest1.png')
-        s.images['wall'] = s.loadImage('images/oryx/dirtWall_0.png')
-        s.images['key'] = s.loadImage('images/oryx/key2.png')
-        s.images['black'] = s.loadImage('images/black.png')
-        s.images['white'] = s.loadImage('images/white.png')
-        s.images['l1'] = s.loadImage('images/l1.png')
-        s.images['l2'] = s.loadImage('images/l2.png')
+        s.images['floor'] = s.loadImage('../images/oryx/backLBrown.png')
+        s.images['gold'] = s.loadImage('../images/oryx/gold2.png')
+        s.images['diamond'] = s.loadImage('../images/oryx/diamond1.png')
+        s.images['treasure'] = s.loadImage('../images/oryx/treasure1.png')
+        s.images['chest'] = s.loadImage('../images/oryx/treasure2.png')
+        s.images['trapchest'] = s.loadImage('../images/oryx/treasure2.png')
+        s.images['shovel'] = s.loadImage('../images/oryx/pickaxe.png')
+        s.images['avatar'] = s.loadImage('../images/oryx/axeman1.png')
+        s.images['nokey'] = s.loadImage('../images/oryx/axeman1.png')
+        s.images['withkey'] = s.loadImage('../images/oryx/axeman1.png')
+        s.images['monsterQuick'] = s.loadImage('../images/oryx/bat1.png')
+        s.images['monsterNormal'] = s.loadImage('../images/oryx/spider2.png')
+        s.images['monsterSlow'] = s.loadImage('../images/oryx/scorpion1.png')
+        s.images['monsterChest'] = s.loadImage('../images/oryx/trapChest1.png')
+        s.images['wall'] = s.loadImage('../images/oryx/dirtWall_0.png')
+        s.images['key'] = s.loadImage('../images/oryx/key2.png')
+        s.images['black'] = s.loadImage('../images/black.png')
+        s.images['white'] = s.loadImage('../images/white.png')
+        s.images['l1'] = s.loadImage('../images/l1.png')
+        s.images['l2'] = s.loadImage('../images/l2.png')
+        s.images['shovel nokey'] = s.loadImage('../images/oryx/axeman1.png')
     }
 
     s.updateMap = () => {
@@ -157,15 +157,13 @@ export let outputs = (s) => {
     s.setValue = (a1, a2, map) => {
         s.ActionsTarget = a1
         s.Actions2Target = a2
-        // if(s.tween)
-        //     s.tween.stop()
-        // if(s.tween2)
-        //     s.tween2.stop()
+        s.tween?.stop()
+        s.tween2?.stop()
         s.Actions2Diff = minus(s.Actions2, s.Actions2Target)
-        console.log(s.Actions2Diff)
+        // console.log(s.Actions2Diff)
         s.tween?.to(s.ActionsTarget, 100).start(undefined, false)
         s.tween2?.to(s.Actions2Target, 100).start(undefined, false)
-        
+
         // s.Actions = a1
         // s.Actions2 = a2
         s.map = map
@@ -189,7 +187,7 @@ export let outputs = (s) => {
             const position = s.Positions2[i]
             const [x, y] = position
 
-            const fillColor = temperatureToColor(s.Actions2Diff[i] +( s.Actions2Target[i] - s.Actions2[i])/10)
+            const fillColor = temperatureToColor(s.Actions2Diff[i] + (s.Actions2Target[i] - s.Actions2[i]) / 10)
 
             s.fill(fillColor)
             s.circle(x, y, 40)
