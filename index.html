@@ -121,8 +121,18 @@
 
 
 <h2>Reinforcement Learning With Dual-Observation Demo</h2>
+<div style="width: 100%;text-align: justify; font-size:18px;">A demo for demonstrate how DORL works, taking <i>GoldDigger</i> in GVGAI as an example.
+    The below game is a <i>GoldDigger</i> level. The goal of the agent is to collect all the golds and avoid the monsters. For each given state, DORL will extract two observations, global observation and local observation, 
+    and use them as inputs to the agent. According to the observations, the agent will choose an the best action to play the game，where possibilities of different action are given by the neural network.
+
+<br><br>
+Click button <i>Next Step</i> to see how the agent plays the game step by step.
+<br>
+Click button <i>Auto Play</i> to see how the agent plays the game automatically.
+</div>
 
 
+<br>
 <div>
     <div style="display: flex; align-items: center; padding-top: 25px; padding-bottom: 25px; background-color:rgba(169, 169, 169, 0.186); justify-content: space-evenly;">
         <div id="gamePreview"></div>
