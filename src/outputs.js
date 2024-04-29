@@ -175,6 +175,10 @@ export let outputs = (s) => {
         s.textSize(15)
         s.textAlign(s.CENTER, s.CENTER)
 
+        s.push()
+
+        s.textSize(20)
+
         for (let i = 0; i < s.Positions.length; i++) {
             const [x1, y1] = s.Positions[i]
             const [x2, y2] = s.Positions2[i]
@@ -190,7 +194,7 @@ export let outputs = (s) => {
             const fillColor = temperatureToColor(s.Actions2Diff[i] + (s.Actions2Target[i] - s.Actions2[i]) / 10)
 
             s.fill(fillColor)
-            s.circle(x, y, 40)
+            s.circle(x, y, 45)
 
             s.fill(0)
             s.text(`${s.Actions2[i].toFixed(1)}`, x, y)
@@ -204,24 +208,26 @@ export let outputs = (s) => {
             const fillColor = s.Actions[i] * 255
 
             s.fill(fillColor)
-            s.circle(x, y, 40)
+            s.circle(x, y, 45)
 
             s.fill(255 - fillColor)
             s.text(`${s.Actions[i].toFixed(1)}`, x, y)
         }
 
 
-
+        s.textAlign(s.LEFT, s.CENTER)
         for (let i = 0; i < s.OutputName.length; i++) {
             const position = s.Positions[i]
             let [x, y] = position
-            x += 50
+            x += 40
 
             s.fill(0)
 
             s.text(s.OutputName[i], x, y)
 
         }
+
+        s.pop()
     }
 
     s.draw_arrow = (sx, sy, ex, ey) => {
